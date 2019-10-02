@@ -41,9 +41,9 @@ app.get('/', (req, res) => {
 })
 
 // API route in which the price information will be sent to from the clientside
-app.post('/prices/new', (req, res) => {
+app.post('/prices/new/', (req, res) => {
     // Trigger the 'prices' event to the 'coin-prices' channel
-    pusher.trigger( 'private-coin-prices', 'prices', {
+    pusher.trigger( 'coin-prices', 'prices', {
         prices: req.body.prices
     });
     res.sendStatus(200);

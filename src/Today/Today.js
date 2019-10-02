@@ -14,7 +14,7 @@ class Today extends Component {
         };
     }
     sendPricePusher (data) {
-        axios.post('/prices/new', {
+        axios.post('/prices/new/', {
             prices: data
         })
             .then(response => {
@@ -31,7 +31,7 @@ class Today extends Component {
             encrypted: true
         });
         // Subscribe to the 'coin-prices' channel
-        this.prices = this.pusher.subscribe('private-coin-prices');
+        this.prices = this.pusher.subscribe('coin-prices');
         axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC&tsyms=USD')
             .then(response => {
                 this.setState({ btcprice: response.data.BTC.USD });
@@ -63,7 +63,11 @@ class Today extends Component {
                     console.log(error)
                 })
         }, 10000)
+        this.prices.bind('pusher:subscription_succeeded', function() {
+            console.log("**********success******************");
+        });
         this.prices.bind('prices', price => {
+            console.log("**********bind*************");
             this.setState({ btcprice: price.prices.BTC.USD });
             this.setState({ ethprice: price.prices.ETH.USD });
             this.setState({ ltcprice: price.prices.LTC.USD });
